@@ -1,0 +1,89 @@
+{
+  "app": {
+    "name": "Tourgeman",
+    "tagline": "תרגום ספרים בעברית — מהיר, נקי ומקצועי"
+  },
+  "nav": {
+    "dashboard": "לוח בקרה",
+    "jobs": "תרגומים",
+    "glossary": "מילון",
+    "settings": "הגדרות"
+  },
+  "common": {
+    "search": "חיפוש…",
+    "language": "שפה",
+    "save": "שמירה",
+    "cancel": "ביטול",
+    "delete": "מחיקה",
+    "download": "הורדה",
+    "open": "פתח",
+    "refresh": "רענן",
+    "status": "סטטוס",
+    "createdAt": "נוצר",
+    "updatedAt": "עודכן",
+    "actions": "פעולות"
+  },
+  "dashboard": {
+    "title": "לוח בקרה",
+    "uploadTitle": "העלאת PDF בעברית",
+    "recentJobs": "תרגומים אחרונים",
+    "stats": {
+      "total": "סה״כ",
+      "completed": "הושלמו",
+      "inProgress": "בתהליך",
+      "failed": "נכשלו"
+    }
+  },
+  "upload": {
+    "pdfLabel": "קובץ PDF",
+    "targetLanguage": "שפת יעד",
+    "targetLanguagePlaceholder": "בחר שפה",
+    "advanced": "אפשרויות מתקדמות",
+    "ocrModel": "מודל OCR",
+    "translateModel": "מודל תרגום",
+    "maxPages": "מקס׳ עמודים (0 = כולם)",
+    "chunkMaxChars": "מקס׳ תווים ל-chunk",
+    "submit": "התחל תרגום",
+    "selectFile": "בחר PDF",
+    "dragDrop": "גרור ושחרר PDF כאן"
+  },
+  "jobs": {
+    "title": "תרגומים",
+    "empty": "אין עדיין תרגומים שמורים.",
+    "open": "פתח",
+    "job": "Job",
+    "file": "קובץ",
+    "progress": "התקדמות",
+    "downloadDocx": "הורד DOCX"
+  },
+  "jobStatus": {
+    "pending": "ממתין",
+    "processing": "מעבד",
+    "completed": "הושלם",
+    "failed": "נכשל"
+  },
+  "glossary": {
+    "title": "מילון",
+    "subtitle": "זיכרון תרגום (מקור בעברית → יעד)",
+    "addRow": "הוסף ערך",
+    "source": "מקור (עברית)",
+    "target": "יעד",
+    "saved": "המילון נשמר"
+  },
+  "settings": {
+    "title": "הגדרות",
+    "backend": "Backend",
+    "backendDesc": "כתובת ה-backend שמשמשת את ה-proxy של Next.js",
+    "health": "סטטוס",
+    "ok": "OK",
+    "notOk": "לא זמין"
+  },
+  "toasts": {
+    "uploadStarted": "התרגום התחיל",
+    "uploadFailed": "התחלה נכשלה",
+    "downloadReady": "ההורדה מוכנה",
+    "saved": "נשמר"
+  }
+}
+
+

@@ -1,0 +1,89 @@
+{
+  "app": {
+    "name": "Tourgeman",
+    "tagline": "Hebrew book translation — fast, clean, and pro"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "jobs": "Translations",
+    "glossary": "Glossary",
+    "settings": "Settings"
+  },
+  "common": {
+    "search": "Search…",
+    "language": "Language",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "download": "Download",
+    "open": "Open",
+    "refresh": "Refresh",
+    "status": "Status",
+    "createdAt": "Created",
+    "updatedAt": "Updated",
+    "actions": "Actions"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "uploadTitle": "Upload a Hebrew PDF",
+    "recentJobs": "Recent translations",
+    "stats": {
+      "total": "Total",
+      "completed": "Completed",
+      "inProgress": "In progress",
+      "failed": "Failed"
+    }
+  },
+  "upload": {
+    "pdfLabel": "PDF file",
+    "targetLanguage": "Target language",
+    "targetLanguagePlaceholder": "Choose a language",
+    "advanced": "Advanced options",
+    "ocrModel": "OCR model",
+    "translateModel": "Translation model",
+    "maxPages": "Max pages (0 = all)",
+    "chunkMaxChars": "Chunk max chars",
+    "submit": "Start translation",
+    "selectFile": "Select a PDF",
+    "dragDrop": "Drag & drop a PDF here"
+  },
+  "jobs": {
+    "title": "Translations",
+    "empty": "No saved translations yet.",
+    "open": "Open",
+    "job": "Job",
+    "file": "File",
+    "progress": "Progress",
+    "downloadDocx": "Download DOCX"
+  },
+  "jobStatus": {
+    "pending": "Pending",
+    "processing": "Processing",
+    "completed": "Completed",
+    "failed": "Failed"
+  },
+  "glossary": {
+    "title": "Glossary",
+    "subtitle": "Translation memory (Hebrew source → target)",
+    "addRow": "Add entry",
+    "source": "Source (Hebrew)",
+    "target": "Target",
+    "saved": "Glossary saved"
+  },
+  "settings": {
+    "title": "Settings",
+    "backend": "Backend",
+    "backendDesc": "Backend URL used by the Next.js proxy",
+    "health": "Status",
+    "ok": "OK",
+    "notOk": "Unavailable"
+  },
+  "toasts": {
+    "uploadStarted": "Translation started",
+    "uploadFailed": "Failed to start",
+    "downloadReady": "Download ready",
+    "saved": "Saved"
+  }
+}
+
+

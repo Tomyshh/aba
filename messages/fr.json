@@ -1,0 +1,89 @@
+{
+  "app": {
+    "name": "Tourgeman",
+    "tagline": "Traduction de livres hébreux — rapide, propre, et pro"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "jobs": "Traductions",
+    "glossary": "Glossaire",
+    "settings": "Paramètres"
+  },
+  "common": {
+    "search": "Rechercher…",
+    "language": "Langue",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "download": "Télécharger",
+    "open": "Ouvrir",
+    "refresh": "Actualiser",
+    "status": "Statut",
+    "createdAt": "Créé le",
+    "updatedAt": "Mis à jour",
+    "actions": "Actions"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "uploadTitle": "Importer un PDF en hébreu",
+    "recentJobs": "Traductions récentes",
+    "stats": {
+      "total": "Total",
+      "completed": "Terminées",
+      "inProgress": "En cours",
+      "failed": "Échouées"
+    }
+  },
+  "upload": {
+    "pdfLabel": "Fichier PDF",
+    "targetLanguage": "Langue cible",
+    "targetLanguagePlaceholder": "Choisir une langue",
+    "advanced": "Options avancées",
+    "ocrModel": "Modèle OCR",
+    "translateModel": "Modèle traduction",
+    "maxPages": "Max pages (0 = toutes)",
+    "chunkMaxChars": "Taille max des chunks",
+    "submit": "Démarrer la traduction",
+    "selectFile": "Sélectionner un PDF",
+    "dragDrop": "Glisser-déposer un PDF ici"
+  },
+  "jobs": {
+    "title": "Traductions",
+    "empty": "Aucune traduction enregistrée pour le moment.",
+    "open": "Ouvrir",
+    "job": "Job",
+    "file": "Fichier",
+    "progress": "Progression",
+    "downloadDocx": "Télécharger le DOCX"
+  },
+  "jobStatus": {
+    "pending": "En attente",
+    "processing": "Traitement",
+    "completed": "Terminé",
+    "failed": "Échec"
+  },
+  "glossary": {
+    "title": "Glossaire",
+    "subtitle": "Mémoire de traduction (source hébreu → cible)",
+    "addRow": "Ajouter une entrée",
+    "source": "Source (hébreu)",
+    "target": "Cible",
+    "saved": "Glossaire enregistré"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "backend": "Backend",
+    "backendDesc": "URL du backend utilisé par le proxy Next.js",
+    "health": "État",
+    "ok": "OK",
+    "notOk": "Indisponible"
+  },
+  "toasts": {
+    "uploadStarted": "Traduction démarrée",
+    "uploadFailed": "Échec du démarrage",
+    "downloadReady": "Téléchargement prêt",
+    "saved": "Enregistré"
+  }
+}
+
+

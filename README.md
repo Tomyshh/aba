@@ -1,3 +1,53 @@
+# ABA — Tourgeman (Frontend)
+
+Application **Next.js (App Router) + TypeScript + Tailwind** pour :
+- **Uploader** des livres en hébreu (PDF)
+- Suivre le **statut** de traduction (polling)
+- **Télécharger** le DOCX traduit
+- Gérer un **glossaire** (mémoire de traduction)
+- Basculer l’interface en **FR / EN / HE** (RTL automatique pour l’hébreu)
+
+## Démarrage
+
+1) Installer
+
+```bash
+npm install
+```
+
+2) Configurer le backend (optionnel)
+
+Par défaut, le proxy utilise `https://aba-backend-9lba.onrender.com`.
+
+Copie `example.env` → `.env` et ajuste si besoin :
+
+```bash
+ABA_BACKEND_URL=https://aba-backend-9lba.onrender.com
+```
+
+3) Lancer en dev
+
+```bash
+npm run dev
+```
+
+## Architecture (high level)
+
+- **UI / pages** : `src/app/(app)/*`
+- **Composants** : `src/components/*`
+- **Proxy API (route handlers)** : `src/app/api/*` (forward vers le backend)
+- **i18n** : `src/i18n/*` + `messages/*.json`
+- **History local** (jobs) : `src/lib/history.ts` (localStorage)
+
+## Backend
+
+Le frontend appelle **uniquement** les endpoints Next (`/api/*`) qui proxy le backend :
+- `GET /api/health`
+- `POST /api/translate`
+- `GET /api/jobs/:id`
+- `GET /api/jobs/:id/download`
+- `GET/POST /api/glossary`
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
