@@ -1,8 +1,14 @@
 import { useTranslations } from "next-intl";
+import { redirect } from "next/navigation";
 
 import { LoginForm } from "./ui/login-form";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const supabase = await createSupabaseServerClient();
+  const { data } = supabase ? await supabase.auth.getUser() : { data: { user: null } };
+  if (data.user) redirect("/dashboard");
+
   const t = useTranslations("auth");
 
   return (
