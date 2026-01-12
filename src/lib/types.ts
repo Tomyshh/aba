@@ -7,7 +7,8 @@ export type JobProgress = {
 
 export type JobResponse = {
   id: string;
-  status: JobStatus;
+  // Backend may send a string we normalize at the UI boundary
+  status: string;
   progress?: JobProgress;
   error?: string | null;
   output?: {

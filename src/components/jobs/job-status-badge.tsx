@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 
 import type { JobStatus } from "@/lib/types";
+import { normalizeJobStatus } from "@/lib/job-status";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +16,8 @@ const colors: Record<JobStatus, string> = {
 
 export function JobStatusBadge({ status }: { status: JobStatus }) {
   const t = useTranslations("jobStatus");
-  return <Badge className={cn("border", colors[status])}>{t(status)}</Badge>;
+  const s = normalizeJobStatus(status);
+  return <Badge className={cn("border", colors[s])}>{t(s)}</Badge>;
 }
 
 

@@ -59,6 +59,7 @@
   "jobStatus": {
     "pending": "Pending",
     "processing": "Processing",
+    "running": "Processing",
     "completed": "Completed",
     "failed": "Failed"
   },
@@ -83,6 +84,18 @@
     "uploadFailed": "Failed to start",
     "downloadReady": "Download ready",
     "saved": "Saved"
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "Access your translation workspace",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "invalidEmail": "Invalid email",
+    "invalidPassword": "Invalid password",
+    "errorTitle": "Unable to sign in",
+    "success": "Signed in",
+    "hint": "Email + password authentication (Supabase)."
   }
 }
 

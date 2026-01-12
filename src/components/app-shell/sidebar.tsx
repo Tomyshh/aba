@@ -13,7 +13,7 @@ export function Sidebar() {
   const t = useTranslations("nav");
 
   return (
-    <aside className="hidden lg:flex lg:w-[280px] lg:flex-col lg:gap-6 lg:px-5 lg:py-6">
+    <aside className="hidden lg:flex lg:w-[280px] lg:flex-col lg:gap-6 lg:px-2 lg:py-2">
       <div className="rounded-3xl bg-gradient-to-b from-[rgb(var(--sidebar))] to-[rgb(var(--sidebar-2))] p-5 text-white shadow-sm">
         <div className="flex items-center gap-3">
           <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white/20 font-semibold">
@@ -62,18 +62,6 @@ export function Sidebar() {
           );
         })}
       </nav>
-
-      <div className="mt-auto rounded-3xl border border-black/5 dark:border-white/10 bg-white/60 dark:bg-white/5 p-4">
-        <div className="text-xs font-semibold">Upgrade</div>
-        <div className="mt-1 text-xs text-black/55 dark:text-white/60">
-          Débloque plus de pages, plus rapide.
-        </div>
-        <div className="mt-3">
-          <span className="inline-flex rounded-xl bg-[rgb(var(--primary))] px-3 py-2 text-xs font-semibold text-white">
-            Upgrade your plan
-          </span>
-        </div>
-      </div>
     </aside>
   );
 }

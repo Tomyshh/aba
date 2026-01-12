@@ -10,6 +10,7 @@ import { useHistory } from "@/hooks/use-history";
 import { useJob } from "@/hooks/use-job";
 import { getJobDownloadUrl } from "@/lib/api";
 import { formatDateTime } from "@/lib/utils";
+import { normalizeJobStatus } from "@/lib/job-status";
 import { JobStatusBadge } from "./job-status-badge";
 import { JobProgressBar } from "./job-progress";
 import { useEffect } from "react";
@@ -22,10 +23,10 @@ function Row({ jobId }: { jobId: string }) {
 
   useEffect(() => {
     const s = job.data?.status;
-    if (s) updateStatus(jobId, s);
+    if (s) updateStatus(jobId, normalizeJobStatus(s));
   }, [job.data?.status, jobId, updateStatus]);
 
-  const status = job.data?.status ?? item?.status;
+  const status = job.data?.status ? normalizeJobStatus(job.data.status) : item?.status;
 
   if (!item) return null;
 
@@ -65,7 +66,7 @@ function Row({ jobId }: { jobId: string }) {
           size="sm"
           onClick={() => {
             const s = job.data?.status;
-            if (s) updateStatus(jobId, s);
+            if (s) updateStatus(jobId, normalizeJobStatus(s));
             job.refetch();
           }}
           aria-label={tc("refresh")}

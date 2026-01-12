@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Noto_Sans_Hebrew } from "next/font/google";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
@@ -8,19 +8,16 @@ import { getLocale, getMessages } from "next-intl/server";
 import { getDirection, type Locale } from "@/i18n/config";
 import { Providers } from "./providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 const notoHebrew = Noto_Sans_Hebrew({
   variable: "--font-noto-hebrew",
   subsets: ["hebrew", "latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -40,7 +37,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${notoHebrew.variable} antialiased`}
+        className={`${inter.variable} ${notoHebrew.variable} antialiased font-sans`}
       >
         <NextIntlClientProvider messages={messages}>
           <Providers>{children}</Providers>

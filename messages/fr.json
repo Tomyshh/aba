@@ -59,6 +59,7 @@
   "jobStatus": {
     "pending": "En attente",
     "processing": "Traitement",
+    "running": "Traitement",
     "completed": "Terminé",
     "failed": "Échec"
   },
@@ -83,6 +84,18 @@
     "uploadFailed": "Échec du démarrage",
     "downloadReady": "Téléchargement prêt",
     "saved": "Enregistré"
+  },
+  "auth": {
+    "title": "Connexion",
+    "subtitle": "Accède à ton espace de traduction",
+    "email": "Email",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "invalidEmail": "Email invalide",
+    "invalidPassword": "Mot de passe invalide",
+    "errorTitle": "Connexion impossible",
+    "success": "Connecté",
+    "hint": "Connexion par email et mot de passe (Supabase)."
   }
 }
 

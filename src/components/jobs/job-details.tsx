@@ -11,6 +11,7 @@ import { useJob } from "@/hooks/use-job";
 import { useHistory } from "@/hooks/use-history";
 import { getJobDownloadUrl } from "@/lib/api";
 import { formatDateTime } from "@/lib/utils";
+import { normalizeJobStatus } from "@/lib/job-status";
 import { JobProgressBar } from "./job-progress";
 import { JobStatusBadge } from "./job-status-badge";
 
@@ -23,10 +24,10 @@ export function JobDetails({ jobId }: { jobId: string }) {
 
   useEffect(() => {
     const s = job.data?.status;
-    if (s) updateStatus(jobId, s);
+    if (s) updateStatus(jobId, normalizeJobStatus(s));
   }, [job.data?.status, jobId, updateStatus]);
 
-  const status = job.data?.status ?? item?.status;
+  const status = job.data?.status ? normalizeJobStatus(job.data.status) : item?.status;
 
   return (
     <Card>

@@ -59,6 +59,7 @@
   "jobStatus": {
     "pending": "ממתין",
     "processing": "מעבד",
+    "running": "מעבד",
     "completed": "הושלם",
     "failed": "נכשל"
   },
@@ -83,6 +84,18 @@
     "uploadFailed": "התחלה נכשלה",
     "downloadReady": "ההורדה מוכנה",
     "saved": "נשמר"
+  },
+  "auth": {
+    "title": "התחברות",
+    "subtitle": "גישה לסביבת התרגום שלך",
+    "email": "אימייל",
+    "password": "סיסמה",
+    "submit": "התחבר",
+    "invalidEmail": "אימייל לא תקין",
+    "invalidPassword": "סיסמה לא תקינה",
+    "errorTitle": "לא ניתן להתחבר",
+    "success": "התחברת",
+    "hint": "התחברות באמצעות אימייל וסיסמה (Supabase)."
   }
 }
 
