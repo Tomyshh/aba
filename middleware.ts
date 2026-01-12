@@ -18,6 +18,12 @@ export default async function middleware(req: NextRequest) {
   // Public routes
   const isLogin = pathname === "/login" || pathname.startsWith("/login/");
   const isPublic = isLogin;
+  // Protected routes (app routes that need auth)
+  const isProtected = pathname.startsWith("/dashboard") || 
+                      pathname.startsWith("/jobs") || 
+                      pathname.startsWith("/glossary") || 
+                      pathname.startsWith("/settings") ||
+                      pathname === "/";
 
   // Protect app routes; keep other things (api/_next/files) out via matcher
   try {
@@ -39,7 +45,7 @@ export default async function middleware(req: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user && !isPublic) {
+    if (!user && isProtected) {
       const nextUrl = req.nextUrl.clone();
       nextUrl.pathname = "/login";
       // optional: preserve destination
@@ -54,8 +60,13 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(nextUrl, { headers: res.headers });
     }
   } catch {
-    // If env is not set, skip auth (dev). i18n still works.
-    return res;
+    // If env is not set, still protect routes by redirecting to login
+    if (isProtected && !isLogin) {
+      const nextUrl = req.nextUrl.clone();
+      nextUrl.pathname = "/login";
+      nextUrl.searchParams.set("next", pathname);
+      return NextResponse.redirect(nextUrl, { headers: res.headers });
+    }
   }
 
   return res;

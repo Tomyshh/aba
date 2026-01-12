@@ -4,25 +4,30 @@ import { cookies } from "next/headers";
 import { getSupabaseEnv } from "./env";
 
 export async function createSupabaseServerClient() {
-  const { url, anonKey } = getSupabaseEnv();
-  const cookieStore = await cookies();
+  try {
+    const { url, anonKey } = getSupabaseEnv();
+    const cookieStore = await cookies();
 
-  return createServerClient(url, anonKey, {
-    cookies: {
-      getAll() {
-        return cookieStore.getAll();
+    return createServerClient(url, anonKey, {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            cookieStore.set(name, value, options);
+          });
+        },
       },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          cookieStore.set(name, value, options);
-        });
-      },
-    },
-  });
+    });
+  } catch {
+    return null;
+  }
 }
 
 export async function getSupabaseAccessToken() {
   const supabase = await createSupabaseServerClient();
+  if (!supabase) return null;
   const { data } = await supabase.auth.getSession();
   return data.session?.access_token ?? null;
 }
