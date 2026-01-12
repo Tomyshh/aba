@@ -10,103 +10,74 @@ const intlMiddleware = createMiddleware({
   localePrefix: "never",
 });
 
-// Public routes that don't require auth
-const PUBLIC_ROUTES = ["/login"];
-
-// Check if a pathname is public
-function isPublicRoute(pathname: string) {
-  return PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
-}
-
-// Check if a pathname is a protected app route
-function isProtectedRoute(pathname: string) {
-  return (
-    pathname === "/" ||
-    pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/jobs") ||
-    pathname.startsWith("/glossary") ||
-    pathname.startsWith("/settings")
-  );
-}
-
 export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
-  const isPublic = isPublicRoute(pathname);
-  const isProtected = isProtectedRoute(pathname);
 
-  console.log(`[Middleware] ${pathname} - isProtected: ${isProtected}, isPublic: ${isPublic}`);
+  // Skip non-app routes
+  if (
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/_next") ||
+    pathname.includes(".")
+  ) {
+    return NextResponse.next();
+  }
 
-  // Get Supabase env vars (accept both naming conventions)
+  // Login page is public
+  if (pathname === "/login" || pathname.startsWith("/login/")) {
+    // Check if user is already logged in → redirect to dashboard
+    const user = await getUser(req);
+    if (user) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+    return intlMiddleware(req);
+  }
+
+  // All other routes require auth
+  const user = await getUser(req);
+  
+  if (!user) {
+    // Not logged in → redirect to login
+    const loginUrl = new URL("/login", req.url);
+    loginUrl.searchParams.set("next", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // User is authenticated, continue
+  return intlMiddleware(req);
+}
+
+async function getUser(req: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const supabaseAnonKey = (
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY
   )?.trim();
 
-  // If Supabase is not configured, redirect protected routes to login
   if (!supabaseUrl || !supabaseAnonKey) {
-    console.log("[Middleware] Supabase not configured, redirecting to login");
-    if (isProtected) {
-      const loginUrl = req.nextUrl.clone();
-      loginUrl.pathname = "/login";
-      loginUrl.searchParams.set("next", pathname);
-      loginUrl.searchParams.set("error", "config");
-      return NextResponse.redirect(loginUrl);
-    }
-    // Let public routes through with i18n
-    return intlMiddleware(req);
+    return null; // Supabase not configured = no user
   }
 
-  // Create Supabase client with cookies
-  let response = NextResponse.next({
-    request: { headers: req.headers },
-  });
-
-  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-    cookies: {
-      getAll() {
-        return req.cookies.getAll();
+  try {
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+      cookies: {
+        getAll() {
+          return req.cookies.getAll();
+        },
+        setAll() {
+          // We don't need to set cookies in this check
+        },
       },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => {
-          req.cookies.set(name, value);
-          response.cookies.set(name, value, options);
-        });
-      },
-    },
-  });
+    });
 
-  // Check if user is authenticated
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  console.log(`[Middleware] User: ${user ? user.email : "null"}`);
-
-  // Not authenticated + protected route → redirect to login
-  if (!user && isProtected) {
-    console.log("[Middleware] No user + protected route → redirect to /login");
-    const loginUrl = req.nextUrl.clone();
-    loginUrl.pathname = "/login";
-    loginUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(loginUrl);
+    const { data: { user } } = await supabase.auth.getUser();
+    return user;
+  } catch {
+    return null;
   }
-
-  // Authenticated + on login page → redirect to dashboard
-  if (user && isPublic) {
-    console.log("[Middleware] User + public route → redirect to /dashboard");
-    const dashboardUrl = req.nextUrl.clone();
-    dashboardUrl.pathname = "/dashboard";
-    dashboardUrl.search = "";
-    return NextResponse.redirect(dashboardUrl);
-  }
-
-  // Apply i18n middleware and return
-  return intlMiddleware(req);
 }
 
 export const config = {
-  matcher: ["/((?!api|_next|.*\\..*).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
 
 
