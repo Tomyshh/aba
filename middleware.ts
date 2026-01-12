@@ -36,9 +36,12 @@ export default async function middleware(req: NextRequest) {
 
   console.log(`[Middleware] ${pathname} - isProtected: ${isProtected}, isPublic: ${isPublic}`);
 
-  // Get Supabase env vars
+  // Get Supabase env vars (accept both naming conventions)
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+  const supabaseAnonKey = (
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY
+  )?.trim();
 
   // If Supabase is not configured, redirect protected routes to login
   if (!supabaseUrl || !supabaseAnonKey) {
