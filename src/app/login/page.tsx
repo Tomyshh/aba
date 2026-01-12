@@ -1,5 +1,5 @@
-import { useTranslations } from "next-intl";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { LoginForm } from "./ui/login-form";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -9,7 +9,7 @@ export default async function LoginPage() {
   const { data } = supabase ? await supabase.auth.getUser() : { data: { user: null } };
   if (data.user) redirect("/dashboard");
 
-  const t = useTranslations("auth");
+  const t = await getTranslations("auth");
 
   return (
     <div className="min-h-dvh bg-[rgb(var(--bg))]">
