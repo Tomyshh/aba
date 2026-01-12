@@ -3,7 +3,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
 import { defaultLocale, locales } from "./src/i18n/config";
-import { getSupabaseEnv } from "./src/lib/supabase/env";
 
 const intlMiddleware = createMiddleware({
   locales,
@@ -11,65 +10,89 @@ const intlMiddleware = createMiddleware({
   localePrefix: "never",
 });
 
+// Public routes that don't require auth
+const PUBLIC_ROUTES = ["/login"];
+
+// Check if a pathname is public
+function isPublicRoute(pathname: string) {
+  return PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
+}
+
+// Check if a pathname is a protected app route
+function isProtectedRoute(pathname: string) {
+  return (
+    pathname === "/" ||
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/jobs") ||
+    pathname.startsWith("/glossary") ||
+    pathname.startsWith("/settings")
+  );
+}
+
 export default async function middleware(req: NextRequest) {
-  const res = intlMiddleware(req);
   const pathname = req.nextUrl.pathname;
+  const isPublic = isPublicRoute(pathname);
+  const isProtected = isProtectedRoute(pathname);
 
-  // Public routes
-  const isLogin = pathname === "/login" || pathname.startsWith("/login/");
-  const isPublic = isLogin;
-  // Protected routes (app routes that need auth)
-  const isProtected = pathname.startsWith("/dashboard") || 
-                      pathname.startsWith("/jobs") || 
-                      pathname.startsWith("/glossary") || 
-                      pathname.startsWith("/settings") ||
-                      pathname === "/";
+  // Get Supabase env vars
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
-  // Protect app routes; keep other things (api/_next/files) out via matcher
-  try {
-    const { url, anonKey } = getSupabaseEnv();
-    const supabase = createServerClient(url, anonKey, {
-      cookies: {
-        getAll() {
-          return req.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            res.cookies.set(name, value, options);
-          });
-        },
-      },
-    });
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user && isProtected) {
-      const nextUrl = req.nextUrl.clone();
-      nextUrl.pathname = "/login";
-      // optional: preserve destination
-      nextUrl.searchParams.set("next", pathname);
-      return NextResponse.redirect(nextUrl, { headers: res.headers });
+  // If Supabase is not configured, redirect protected routes to login
+  if (!supabaseUrl || !supabaseAnonKey) {
+    if (isProtected) {
+      const loginUrl = req.nextUrl.clone();
+      loginUrl.pathname = "/login";
+      loginUrl.searchParams.set("next", pathname);
+      loginUrl.searchParams.set("error", "config");
+      return NextResponse.redirect(loginUrl);
     }
-
-    if (user && isLogin) {
-      const nextUrl = req.nextUrl.clone();
-      nextUrl.pathname = "/dashboard";
-      nextUrl.search = "";
-      return NextResponse.redirect(nextUrl, { headers: res.headers });
-    }
-  } catch {
-    // If env is not set, still protect routes by redirecting to login
-    if (isProtected && !isLogin) {
-      const nextUrl = req.nextUrl.clone();
-      nextUrl.pathname = "/login";
-      nextUrl.searchParams.set("next", pathname);
-      return NextResponse.redirect(nextUrl, { headers: res.headers });
-    }
+    // Let public routes through with i18n
+    return intlMiddleware(req);
   }
 
-  return res;
+  // Create Supabase client with cookies
+  let response = NextResponse.next({
+    request: { headers: req.headers },
+  });
+
+  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      getAll() {
+        return req.cookies.getAll();
+      },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value, options }) => {
+          req.cookies.set(name, value);
+          response.cookies.set(name, value, options);
+        });
+      },
+    },
+  });
+
+  // Check if user is authenticated
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Not authenticated + protected route → redirect to login
+  if (!user && isProtected) {
+    const loginUrl = req.nextUrl.clone();
+    loginUrl.pathname = "/login";
+    loginUrl.searchParams.set("next", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // Authenticated + on login page → redirect to dashboard
+  if (user && isPublic) {
+    const dashboardUrl = req.nextUrl.clone();
+    dashboardUrl.pathname = "/dashboard";
+    dashboardUrl.search = "";
+    return NextResponse.redirect(dashboardUrl);
+  }
+
+  // Apply i18n middleware and return
+  return intlMiddleware(req);
 }
 
 export const config = {
