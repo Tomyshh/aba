@@ -34,12 +34,15 @@ export default async function middleware(req: NextRequest) {
   const isPublic = isPublicRoute(pathname);
   const isProtected = isProtectedRoute(pathname);
 
+  console.log(`[Middleware] ${pathname} - isProtected: ${isProtected}, isPublic: ${isPublic}`);
+
   // Get Supabase env vars
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
   // If Supabase is not configured, redirect protected routes to login
   if (!supabaseUrl || !supabaseAnonKey) {
+    console.log("[Middleware] Supabase not configured, redirecting to login");
     if (isProtected) {
       const loginUrl = req.nextUrl.clone();
       loginUrl.pathname = "/login";
@@ -75,8 +78,11 @@ export default async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  console.log(`[Middleware] User: ${user ? user.email : "null"}`);
+
   // Not authenticated + protected route → redirect to login
   if (!user && isProtected) {
+    console.log("[Middleware] No user + protected route → redirect to /login");
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = "/login";
     loginUrl.searchParams.set("next", pathname);
@@ -85,6 +91,7 @@ export default async function middleware(req: NextRequest) {
 
   // Authenticated + on login page → redirect to dashboard
   if (user && isPublic) {
+    console.log("[Middleware] User + public route → redirect to /dashboard");
     const dashboardUrl = req.nextUrl.clone();
     dashboardUrl.pathname = "/dashboard";
     dashboardUrl.search = "";
